@@ -37,15 +37,20 @@ function App() {
     fetchPosts();
   }, []);
 
-  const handleDelete = (id) => {
-    setPosts(posts.filter((post) => post.id !== id));
-    navigate("/");
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/posts/${id}`);
+      setPosts(posts.filter((post) => post.id !== id));
+      navigate("/");
+    } catch (error) {
+      console.log(`Error: ${error.message}`);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
+    const id = (posts.length ? parseInt(posts[posts.length - 1].id) + 1 : 1).toString();
 
     const newPost = {
       id: id,
@@ -53,11 +58,15 @@ function App() {
       datetime: format(new Date(), "MMMM dd, yyyy pp"),
       body: postBody,
     };
-
-    setPosts([...posts, newPost]);
-    setPostTitle("");
-    setPostBody("");
-    navigate("/");
+    try {
+      const response = await api.post("/posts", newPost);
+      setPosts([...posts, response.data]);
+      setPostTitle("");
+      setPostBody("");
+      navigate("/");
+    } catch (error) {
+      console.log(`Error: ${error.message}`);
+    }
   };
 
   useEffect(() => {
