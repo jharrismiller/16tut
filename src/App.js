@@ -7,8 +7,9 @@ import PostPage from "./PostPage";
 import About from "./About";
 import Missing from "./Missing";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
+import api from "./api/posts";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -19,6 +20,23 @@ function App() {
   const [postBody, setPostBody] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        //axios get returns json and checks repsonse ok and throws error
+        const response = await api.get("/posts");
+        setPosts(response.data);
+      } catch (error) {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else console.log(`Error: ${error.message}`);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   const handleDelete = (id) => {
     setPosts(posts.filter((post) => post.id !== id));
     navigate("/");
@@ -28,11 +46,6 @@ function App() {
     e.preventDefault();
 
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
-
-    /*if (!postTitle || !postBody) {
-      alert("Please fill out all fields!");
-      return;
-    }*/
 
     const newPost = {
       id: id,
