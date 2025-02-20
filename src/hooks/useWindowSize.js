@@ -15,8 +15,8 @@ const useWindowSize = () => {
         };
 
         window.addEventListener('resize', handleResize);
+
         return () => {
-            console.log('dep changed');
             window.removeEventListener('resize', handleResize);
         };
     }, []);
