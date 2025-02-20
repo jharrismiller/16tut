@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { format, set } from "date-fns";
 import api from "./api/posts";
 import EditPost from "./EditPost";
+import useWindowSize from "./hooks/useWindowSize"; // import the custom hook
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -22,13 +23,14 @@ function App() {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const navigate = useNavigate();
+  const { width } = useWindowSize(); // use the custom hook
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         //axios get returns json and checks repsonse ok and throws error
         const response = await api.get("/posts");
-        console.log('GET')
+        console.log("GET");
         setPosts(response.data);
       } catch (error) {
         if (error.response) {
@@ -43,7 +45,6 @@ function App() {
 
   const handleEdit = async (id) => {
     try {
-      
       const response = await api.put(`/posts/${id}`, {
         id: id,
         title: editTitle,
@@ -110,7 +111,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header title="React JS Blog" />
+      <Header title="React JS Blog" width={width} />
       <Nav search={search} setSearch={setSearch} />
       <Routes>
         <Route exact path="/" element={<Home posts={searchResults} />} />
@@ -138,7 +139,7 @@ function App() {
               posts={posts}
             />
           }
-        />        
+        />
         <Route
           path="/post/:id"
           element={<PostPage posts={posts} handleDelete={handleDelete} />}
