@@ -11,42 +11,21 @@ import { Route, Routes } from "react-router-dom";
 import { DataProvider } from "./context/DataContext";
 
 function App() {
-
-  
   return (
     <div className="App">
+      <Header title="React JS Blog" />
       <DataProvider>
-        <Header title="React JS Blog" />
         <Nav />
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <Home />
-            }
-          />
-          <Route
-            path="/post"
-            element={
-              <NewPost />
-            }
-          />
-          <Route
-            path="/edit/:id"
-            element={
-              <EditPost />
-            }
-          />
-          <Route
-            path="/post/:id"
-            element={<PostPage />}
-          />
+          <Route exact path="/" element={<Home />} />
+          <Route path="/post" element={<NewPost />} />
+          <Route path="/edit/:id" element={<EditPost />} />
+          <Route path="/post/:id" element={<PostPage />} />
           <Route path="/about" element={<About />}></Route>
           <Route path="*" element={<Missing />} />
         </Routes>
-        <Footer />
       </DataProvider>
+      <Footer />
     </div>
   );
 }
