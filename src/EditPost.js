@@ -20,7 +20,7 @@ const EditPost = () => {
       setEditTitle(post.title);
       setEditBody(post.body);
     }
-  }, [post, setEditTitle, setEditBody]);
+  }, [post]);
 
   const handleEdit = async (id) => {
     try {
