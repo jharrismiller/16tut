@@ -23,6 +23,12 @@
       "title": "TEST 2",
       "body": "TEST",
       "datetime": "February 12, 2025 6:48:23 PM"
+    },
+    {
+      "id": "5",
+      "title": "New Post",
+      "datetime": "February 20, 2025 3:46:29 PM",
+      "body": "Testing AIXOS component"
     }
   ]
 }
