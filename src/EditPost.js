@@ -29,7 +29,7 @@ const EditPost = () => {
     }
   }, [post]);
 
-  const handleEdit = async (id) => {
+  const handleEdit = (id) => {
     const updatedPost = {
       id,
       title: editTitle,

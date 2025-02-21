@@ -15,7 +15,7 @@ const NewPost = () => {
 
   const savePost = useStoreActions((actions) => actions.savePost);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const id = (
