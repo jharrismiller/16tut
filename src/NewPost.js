@@ -1,17 +1,19 @@
 import React from "react";
-import { useContext, useState } from "react";
-import DataContext from "./context/DataContext";
+import { useStoreState, useStoreActions } from "easy-peasy";
 import { format } from "date-fns";
-import api from "./api/posts";
 import { useNavigate } from "react-router-dom";
 
 const NewPost = () => {
-
   const navigate = useNavigate();
-  const [postTitle, setPostTitle] = useState("");
-  const [postBody, setPostBody] = useState("");
+  const posts = useStoreState((state) => state.posts);
 
-  const { posts, setPosts } = useContext(DataContext);
+  const postTitle = useStoreState((state) => state.postTitle);
+  const setPostTitle = useStoreActions((actions) => actions.setPostTitle);
+
+  const postBody = useStoreState((state) => state.postBody);
+  const setPostBody = useStoreActions((actions) => actions.setPostBody);
+
+  const savePost = useStoreActions((actions) => actions.savePost);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,15 +29,8 @@ const NewPost = () => {
       body: postBody,
     };
 
-    try {
-      const response = await api.post("/posts", newPost);
-      setPosts([...posts, response.data]);
-      setPostTitle("");
-      setPostBody("");
-      navigate("/");
-    } catch (error) {
-      console.log(`Error: ${error.message}`);
-    }
+    savePost(newPost);
+    navigate("/");
   };
 
   return (
