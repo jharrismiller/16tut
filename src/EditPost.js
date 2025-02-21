@@ -1,19 +1,26 @@
 import React from "react";
-import { useEffect, useContext, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import DataContext from "./context/DataContext";
 import { useNavigate } from "react-router-dom";
-import api from "./api/posts";
-import format from "date-fns/format";
+import { useStoreState, useStoreActions } from "easy-peasy";
+import { format } from "date-fns";
 
 const EditPost = () => {
-  const [editTitle, setEditTitle] = useState("");
-  const [editBody, setEditBody] = useState("");
-  const { posts, setPosts } = useContext(DataContext);
+  const { id } = useParams();
+
+  const editTitle = useStoreState((store) => store.editTitle);
+  const setEditTitle = useStoreActions((store) => store.setEditTitle);
+
+  const editBody = useStoreState((store) => store.editBody);
+  const setEditBody = useStoreActions((store) => store.setEditBody);
+
+  const editPost = useStoreActions((actions) => actions.editPost);
+
+  const getPostById = useStoreState((state) => state.getPostById);
+  const post = getPostById(id);
+
   const navigate = useNavigate();
 
-  const { id } = useParams();
-  const post = posts.find((post) => post.id === id);
 
   useEffect(() => {
     if (post) {
@@ -23,27 +30,14 @@ const EditPost = () => {
   }, [post]);
 
   const handleEdit = async (id) => {
-    try {
-      const response = await api.put(`/posts/${id}`, {
-        id: id,
-        title: editTitle,
-        body: editBody,
-        datetime: format(new Date(), "MMMM dd, yyyy pp"),
-      });
-
-      setEditTitle("");
-      setEditBody("");
-
-      const updatedPosts = posts.map((post) =>
-        post.id === id ? { ...response.data } : post
-      );
-
-      setPosts(updatedPosts);
-
-      navigate("/");
-    } catch (error) {
-      console.log(`Error: ${error.message}`);
-    }
+    const updatedPost = {
+      id,
+      title: editTitle,
+      body: editBody,
+      datetime: format(new Date(), "MMMM dd, yyyy pp"),
+    };
+    editPost(updatedPost);
+    navigate(`/post/${id}`);
   };
 
   return (

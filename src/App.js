@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     setPosts(data);
-  }, [data, setPosts]); // add data as a dependency
+  }, [data]); // add data as a dependency
 
   return (
     <div className="App">
